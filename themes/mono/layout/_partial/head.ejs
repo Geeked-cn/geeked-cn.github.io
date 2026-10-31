@@ -12,6 +12,9 @@ if (!docTitle) {
   }
 }
 const fullTitle = kind === 'hero' ? config.title : docTitle + ' | ' + config.title;
+// canonical 必须是绝对地址：去掉 index.html 后缀，再拼上站点域名
+const canonicalPath = (page.path || '').replace(/index\.html$/, '');
+const canonicalUrl = config.url.replace(/\/+$/, '') + url_for('/' + canonicalPath);
 %>
 <head>
   <meta charset="utf-8">
@@ -33,7 +36,8 @@ const fullTitle = kind === 'hero' ? config.title : docTitle + ' | ' + config.tit
   <% } %>
   <meta property="og:title" content="<%- docTitle %>">
   <meta property="og:site_name" content="<%- config.title %>">
-  <link rel="canonical" href="<%- url_for(page.path || '/', true) %>">
+  <meta property="og:url" content="<%- canonicalUrl %>">
+  <link rel="canonical" href="<%- canonicalUrl %>">
   <link rel="alternate" type="application/atom+xml" title="<%- config.title %>" href="<%- url_for('/atom.xml') %>">
   <link rel="icon" href="<%- url_for('/favicon.svg') %>" type="image/svg+xml">
   <link rel="preload" as="style" href="<%- url_for('/css/style.css') %>">
