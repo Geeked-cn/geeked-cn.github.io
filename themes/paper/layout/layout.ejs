@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="<%= config.language %>">
+<%- partial('_partial/head') %>
+<body class="is-<%= is_post() ? 'post' : (is_page() ? 'page' : (is_home() ? 'home' : 'archive')) %>">
+  <a class="skip-link" href="#main">跳到正文</a>
+  <%- partial('_partial/header') %>
+  <main id="main" class="site-main">
+    <%- body %>
+  </main>
+  <%- partial('_partial/footer') %>
+</body>
+</html>

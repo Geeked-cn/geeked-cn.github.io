@@ -1,0 +1,22 @@
+<%
+// hero：首页第一屏（整屏动效）；其余页面走普通文档流
+const isHero = is_home() && (typeof page.current === 'undefined' || page.current === 1);
+const kind = isHero ? 'hero' : (is_post() ? 'post' : (is_page() ? 'page' : 'archive'));
+%>
+<!DOCTYPE html>
+<html lang="<%= config.language %>">
+<%- partial('_partial/head', { kind: kind }) %>
+<body class="kind-<%= kind %>">
+  <% if (kind === 'hero') { %>
+  <%- body %>
+  <% } else { %>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <%- partial('_partial/site-header', { kind: kind }) %>
+  <main id="main" class="site-main">
+    <%- body %>
+  </main>
+  <%- partial('_partial/site-footer') %>
+  <% } %>
+  <script src="<%- url_for('/js/decipher.js') %>" defer></script>
+</body>
+</html>

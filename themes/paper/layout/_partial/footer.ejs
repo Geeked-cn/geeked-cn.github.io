@@ -1,0 +1,17 @@
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p class="footer-copy">
+      &copy; <%= theme.footer && theme.footer.since ? theme.footer.since : '' %>&ndash;<%= date(new Date(), 'YYYY') %>
+      <%= config.author || config.title %>
+    </p>
+    <p class="footer-meta">
+      <a href="<%- url_for('/archives/') %>"><%= __('archives') %></a>
+      <% if (theme.footer && theme.footer.powered !== false) { %>
+      <span class="dot">·</span>
+      <%= __('powered_by', '<a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>') %>
+      <span class="dot">·</span>
+      <a href="<%- url_for('/') %>"><%= __('theme') %> paper</a>
+      <% } %>
+    </p>
+  </div>
+</footer>

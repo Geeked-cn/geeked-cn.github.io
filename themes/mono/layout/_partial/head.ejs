@@ -1,0 +1,41 @@
+<%
+let docTitle = page.title;
+if (!docTitle) {
+  if (page.archive && page.year) {
+    docTitle = page.year + ' 年' + (page.month ? ' ' + page.month + ' 月' : '') + __('archive');
+  } else if (page.tag) {
+    docTitle = '#' + page.tag;
+  } else if (page.category) {
+    docTitle = page.category;
+  } else {
+    docTitle = config.subtitle || config.title;
+  }
+}
+const fullTitle = kind === 'hero' ? config.title : docTitle + ' | ' + config.title;
+%>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= fullTitle %></title>
+  <% if (page.description || config.description) { %>
+  <meta name="description" content="<%= page.description || config.description %>">
+  <% } %>
+  <% if (config.keywords) { %>
+  <meta name="keywords" content="<%= config.keywords %>">
+  <% } %>
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light">
+  <%- meta_generator() %>
+  <% if (is_post()) { %>
+  <meta property="og:type" content="article">
+  <% } else { %>
+  <meta property="og:type" content="website">
+  <% } %>
+  <meta property="og:title" content="<%- docTitle %>">
+  <meta property="og:site_name" content="<%- config.title %>">
+  <link rel="canonical" href="<%- url_for(page.path || '/', true) %>">
+  <link rel="alternate" type="application/atom+xml" title="<%- config.title %>" href="<%- url_for('/atom.xml') %>">
+  <link rel="icon" href="<%- url_for('/favicon.svg') %>" type="image/svg+xml">
+  <link rel="preload" as="style" href="<%- url_for('/css/style.css') %>">
+  <link rel="stylesheet" href="<%- url_for('/css/style.css') %>">
+</head>

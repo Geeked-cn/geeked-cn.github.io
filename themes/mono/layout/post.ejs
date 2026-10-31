@@ -1,0 +1,36 @@
+<article class="doc">
+  <header class="doc__header reveal">
+    <p class="doc__eyebrow"><time datetime="<%= date_xml(page.date) %>"><%= date(page.date, 'YYYY/MM/DD') %></time></p>
+    <h1 class="doc__title"><%= page.title %></h1>
+    <p class="doc__meta">
+      <% if (page.categories && page.categories.length) { page.categories.forEach(function (cat) { %>
+      <a class="tag" href="<%- url_for(cat.path) %>"><%= cat.name %></a>
+      <% }) } %>
+      <% if (page.tags && page.tags.length) { page.tags.forEach(function (tag) { %>
+      <a class="tag tag--hash" href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
+      <% }) } %>
+    </p>
+  </header>
+
+  <div class="doc__body">
+    <%- page.content %>
+    <% if (page.updated && date(page.updated, 'YYYY-MM-DD') !== date(page.date, 'YYYY-MM-DD')) { %>
+    <p class="doc__updated"><%= __('updated_on') %> <time datetime="<%= date_xml(page.updated) %>"><%= date(page.updated, 'YYYY/MM/DD') %></time></p>
+    <% } %>
+  </div>
+
+  <nav class="doc__nav" aria-label="前后文章">
+    <% if (page.prev) { %>
+    <a class="doc__nav-link" href="<%- url_for(page.prev.path) %>">
+      <span><%= __('prev') %></span>
+      <strong><%= page.prev.title %></strong>
+    </a>
+    <% } %>
+    <% if (page.next) { %>
+    <a class="doc__nav-link doc__nav-link--next" href="<%- url_for(page.next.path) %>">
+      <span><%= __('next') %></span>
+      <strong><%= page.next.title %></strong>
+    </a>
+    <% } %>
+  </nav>
+</article>

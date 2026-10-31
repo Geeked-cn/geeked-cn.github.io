@@ -1,0 +1,14 @@
+<%
+let archiveTitle = __('archives');
+if (page.year) {
+  archiveTitle = page.year + ' 年';
+  if (page.month) archiveTitle += ' ' + page.month + ' 月';
+}
+%>
+<div class="wrap page-head reveal">
+  <h1 class="page-title"><%= archiveTitle %></h1>
+  <p class="page-desc"><%= __('total_posts', page.posts.length) %></p>
+</div>
+<div class="wrap">
+  <%- partial('_partial/post-list', { posts: page.posts }) %>
+</div>

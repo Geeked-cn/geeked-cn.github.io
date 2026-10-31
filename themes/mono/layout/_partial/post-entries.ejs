@@ -1,0 +1,26 @@
+<%
+// 复用的文章清单：首页 overlay、归档、分类、标签都用它
+const items = (posts && posts.toArray) ? posts.toArray() : (posts || []);
+%>
+<% if (!items.length) { %>
+<p class="empty"><%= __('empty') %></p>
+<% } else { %>
+<ol class="entries">
+  <% items.forEach(function (post) { %>
+  <li class="entry">
+    <header class="entry__head">
+      <h3 class="entry__title"><a href="<%- url_for(post.path) %>"><%= post.title %></a></h3>
+      <time class="entry__date" datetime="<%= date_xml(post.date) %>"><%= date(post.date, 'YYYY/MM/DD') %></time>
+    </header>
+    <p class="entry__meta">
+      <% if (post.categories && post.categories.length) { post.categories.forEach(function (cat) { %>
+      <a class="tag" href="<%- url_for(cat.path) %>"><%= cat.name %></a>
+      <% }) } %>
+      <% if (post.tags && post.tags.length) { post.tags.forEach(function (tag) { %>
+      <a class="tag tag--hash" href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
+      <% }) } %>
+    </p>
+  </li>
+  <% }) %>
+</ol>
+<% } %>

@@ -1,0 +1,20 @@
+node_modules/
+public/
+.deploy_git/
+db.json
+.npm-cache/
+.shots/
+*.log
+.DS_Store
+Thumbs.db
+
+# wrangler / cloudflare 本地文件
+.wrangler
+.wrangler-*/
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+
+# 本地测试服务器日志
+hexo-server*.log

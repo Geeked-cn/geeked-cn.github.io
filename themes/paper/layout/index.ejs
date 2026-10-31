@@ -1,0 +1,25 @@
+<% if (theme.banner === false || (theme.banner && theme.banner.enable === false)) { %>
+  <div class="wrap page-head reveal">
+    <h1 class="page-title"><%= config.title %></h1>
+    <% if (config.subtitle) { %><p class="page-desc"><%= config.subtitle %></p><% } %>
+  </div>
+<% } else { %>
+  <% if (page.current === 1) { %>
+  <section class="banner reveal">
+    <div class="wrap banner-inner">
+      <p class="banner-kicker"><%= date(new Date(), 'YYYY 年 MM 月') %></p>
+      <h1 class="banner-title"><%= (theme.banner && theme.banner.title) || config.title %></h1>
+      <p class="banner-subtitle"><%= (theme.banner && theme.banner.subtitle) || config.subtitle %></p>
+    </div>
+  </section>
+  <% } else { %>
+  <div class="wrap page-head reveal">
+    <h1 class="page-title"><%= config.title %></h1>
+    <p class="page-desc">第 <%= page.current %> 页</p>
+  </div>
+  <% } %>
+<% } %>
+
+<div class="wrap">
+  <%- partial('_partial/post-list', { posts: page.posts }) %>
+</div>

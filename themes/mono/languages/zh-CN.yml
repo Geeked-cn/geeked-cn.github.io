@@ -1,0 +1,20 @@
+home: 首页
+archives: 归档
+archive: 归档
+categories: 分类
+tags: 标签
+about: 关于
+read_more: 阅读全文
+index: 索引
+latest_posts: 最新文章
+site: 站点
+contact: 联系
+prev: 上一篇
+next: 下一篇
+posted_on: 发表于
+updated_on: 更新于
+total_posts: 共 %d 篇
+empty: 这里还没有内容。
+powered_by: 由 %s 生成
+theme: 主题
+back_home: 回到首页

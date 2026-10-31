@@ -1,0 +1,13 @@
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="<%- url_for('/') %>">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text"><%= config.title %></span>
+    </a>
+    <nav class="site-nav" aria-label="主导航">
+      <% Object.keys(theme.menu || {}).forEach(function (name) { %>
+      <a href="<%- url_for(theme.menu[name]) %>"><%= name %></a>
+      <% }) %>
+    </nav>
+  </div>
+</header>

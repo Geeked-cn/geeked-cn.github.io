@@ -1,0 +1,32 @@
+# mono 主题配置
+
+# 首页开场
+hero:
+  # 打字机第一行
+  hello: 'Hello,'
+  # 打字机第二行
+  name: '我在这里写代码，也写字。'
+  # 向下滚动后，overlay 里逐字打出的那句话
+  overlay: '把想清楚的事写下来，把写下来的事做出来。'
+  # ASCII 人像用的照片：原图放 assets/，npm run images 生成 source/img/*.webp
+  portrait: /img/portrait.webp
+  # true：点击后一直保留照片，不再淡出回字符
+  keep_photo: false
+
+# 顶部导航（用于内页）
+menu:
+  首页: /
+  归档: /archives/
+  关于: /about/
+
+# 联系邮箱：默认显示混淆文本，鼠标悬停/聚焦时"破译"出来
+email:
+  address: 'you@example.com'
+  masked: '(λ x . x) you [at] example.com'
+
+footer:
+  since: 2026
+  powered: true
+
+# 首页 overlay 里显示多少篇最新文章
+overlay_posts: 8

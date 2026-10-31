@@ -1,0 +1,15 @@
+<%
+const now = date(new Date(), 'YYYY');
+const since = theme.footer && theme.footer.since ? String(theme.footer.since) : now;
+const years = since === now ? now : since + '–' + now;
+%>
+<footer class="footer">
+  <p>&copy; <%= years %> <%= config.author || config.title %></p>
+  <p>
+    <a href="<%- url_for('/') %>"><%= __('home') %></a>
+    <% if (theme.footer && theme.footer.powered !== false) { %>
+    · <%- __('powered_by', '<a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>') %>
+    · <%= __('theme') %> mono
+    <% } %>
+  </p>
+</footer>

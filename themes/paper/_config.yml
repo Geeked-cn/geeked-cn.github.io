@@ -1,0 +1,24 @@
+# 主题配置：改这里就能调整导航、页脚和颜色
+
+# 顶部导航：[标题, 链接]
+menu:
+  首页: /
+  归档: /archives/
+  关于: /about/
+
+# 主题色（覆盖站点 _config.yml 里的 theme_config.accent 也可以）
+accent: '#b5442e'
+
+# 首页大标题下的标语
+banner:
+  enable: true
+  title: 我的博客
+  subtitle: 记录、思考与分享
+
+# 页脚
+footer:
+  since: 2026
+  powered: true
+
+# 文章页是否显示目录
+toc: true

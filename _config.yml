@@ -1,0 +1,108 @@
+# ---------------------------------------------------------------
+# 站点信息
+# ---------------------------------------------------------------
+title: 我的博客
+subtitle: '记录、思考与分享'
+description: '一个用 Hexo 搭建的静态博客，写代码、写生活。'
+keywords: 'Hexo, 博客, 前端, 技术'
+author: Your Name
+language: zh-CN
+timezone: 'Asia/Shanghai'
+
+# ---------------------------------------------------------------
+# 网址
+# ---------------------------------------------------------------
+# 线上地址（canonical、sitemap、atom 都按它生成）
+url: https://www.xhxh.eu.cc
+root: /
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true
+  trailing_html: true
+
+# ---------------------------------------------------------------
+# 目录
+# ---------------------------------------------------------------
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# ---------------------------------------------------------------
+# 写作
+# ---------------------------------------------------------------
+new_post_name: :title.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+
+# 语法高亮（代码块的配色在主题 CSS 里定义）
+syntax_highlighter: highlight.js
+highlight:
+  line_number: false
+  auto_detect: false
+  tab_replace: '  '
+  wrap: true
+  hljs: false
+
+# 分页
+per_page: 8
+pagination_dir: page
+
+# 首页生成器
+index_generator:
+  path: ''
+  per_page: 8
+  order_by: -date
+
+# RSS / Atom 订阅
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  content: true
+  hub:
+
+# 站点地图（提交给搜索引擎）
+sitemap:
+  path: sitemap.xml
+  rel: false
+  tags: true
+  categories: true
+
+# ---------------------------------------------------------------
+# 主题
+# ---------------------------------------------------------------
+theme: mono
+
+# 主题参数在 themes/mono/_config.yml 里改；
+# 不想动主题文件也可以写在下面覆盖（theme_config 优先级更高），例如：
+# theme_config:
+#   hero:
+#     hello: 'Hi,'
+
+# ---------------------------------------------------------------
+# 部署（二选一，需要时把下面的注释打开）
+# ---------------------------------------------------------------
+# 方式 A：hexo-deployer-git 推到 GitHub Pages
+# deploy:
+#   type: git
+#   repo: https://github.com/你的用户名/你的用户名.github.io.git
+#   branch: main
+#   message: 'Site updated: {{ now("YYYY-MM-DD HH:mm:ss") }}'
+#
+# 方式 B：Cloudflare Pages / Vercel 直接连仓库
+#   构建命令：npm run build      输出目录：public

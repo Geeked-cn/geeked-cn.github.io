@@ -1,0 +1,1024 @@
+/* ==========================================================================
+   mono — 极简黑白 + 等宽字体的个人站主题
+
+   首页是一屏动效：ASCII 人像打底，左侧人像、右侧开场白，
+   向下滚动进入 overlay 索引；其余页面走普通文档流。
+   ========================================================================== */
+
+/* 想用 Maple Mono（OFL 许可）的话，把字体文件放进 source/fonts/ 再打开下面这段：
+@font-face {
+  font-family: 'Maple Mono';
+  src: url('/fonts/MapleMono-VF.woff2') format('woff2-variations');
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+:root {
+  --mono: 'Maple Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+  --ink: #111;
+  --ink-soft: #555;
+  --ink-faint: #777;
+  --rule: #111;
+  --rule-soft: #ddd;
+  --paper: #fff;
+  --code-bg: #f4f4f4;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --swap: opacity 0.42s, transform 0.72s var(--ease-out);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+  background: var(--paper);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 99;
+  padding: 0.5rem 0.9rem;
+  background: var(--ink);
+  color: #fff;
+}
+
+/* ==========================================================================
+   首页第一屏
+   ========================================================================== */
+
+body.kind-hero {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#portrait {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  cursor: pointer;
+  transition: var(--swap);
+}
+
+.intro {
+  position: fixed;
+  z-index: 2;
+  top: 44%;
+  left: 50%;
+  right: 4vw;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: var(--swap);
+}
+
+.intro__copy {
+  margin: 0;
+}
+
+.intro__hello {
+  display: block;
+  white-space: nowrap;
+  font-size: clamp(5rem, 8.4vw, 9.5rem);
+  font-weight: 620;
+  line-height: 0.88;
+  letter-spacing: -0.075em;
+}
+
+.intro__name {
+  display: block;
+  white-space: nowrap;
+  margin-top: 1.5rem;
+  font-size: clamp(1.35rem, 2.15vw, 2.7rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 0.52em;
+  height: 0.88em;
+  margin-left: 0.1em;
+  vertical-align: -0.08em;
+  background: var(--ink);
+}
+
+.typing-cursor.is-finished {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+.solids {
+  position: fixed;
+  z-index: 2;
+  bottom: 3.5rem;
+  left: 50%;
+  width: min(32rem, 56vw);
+  height: 4.25rem;
+  pointer-events: none;
+  transform: translate(-50%);
+  transition: var(--swap);
+}
+
+#solids-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-cue {
+  position: fixed;
+  z-index: 3;
+  bottom: 0.85rem;
+  left: 50%;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  border-top: 1.5rem solid var(--ink);
+  border-left: 1.1rem solid transparent;
+  border-right: 1.1rem solid transparent;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -0.35rem);
+  transition: var(--swap);
+}
+
+.scroll-cue.is-visible {
+  opacity: 0.75;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translate(-50%);
+  animation: cue-bob 1.6s ease-in-out 0.5s infinite;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--paper);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(3rem) scale(0.985);
+  transition: opacity 0.42s, transform 0.76s var(--ease-out), visibility 0s linear 0.76s;
+}
+
+.overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  transition-delay: 80ms, 0s, 0s;
+}
+
+.view-overlay #portrait {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-1.5rem) scale(0.985);
+}
+
+.view-overlay .intro {
+  opacity: 0;
+  transform: translateY(calc(-50% - 2rem));
+}
+
+.view-overlay .solids {
+  opacity: 0;
+  transform: translate(-50%, 0.8rem);
+}
+
+.view-overlay .scroll-cue {
+  opacity: 0;
+  pointer-events: none;
+  animation: none;
+  transform: translate(-50%, 0.75rem);
+}
+
+/* 打字机打出的长句：nowrap + 横向追踪，保证刚打出的字始终在视野内 */
+.overlay__copy {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: max-content;
+  max-width: 96vw;
+  margin: var(--overlay-scroll-y, 0) 0 0;
+  white-space: nowrap;
+  font-size: clamp(1rem, 2.6vw, 3.5rem);
+  font-weight: 520;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+  opacity: 0;
+  translate: var(--overlay-track-x, 0) 0;
+  transform-origin: top;
+  transform: translate(-50%, calc(1.25rem - 50%));
+  transition: top 0.9s var(--ease-out), opacity 0.7s,
+    transform 0.9s var(--ease-out), translate 90ms linear;
+}
+
+.overlay__copy.is-active {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.overlay.is-expanded .overlay__copy {
+  opacity: 0.78;
+  top: 2.25rem;
+  transform: translate(-50%) scale(0.68);
+  transition: top 0.9s var(--ease-out), opacity 0.7s,
+    transform 0.9s var(--ease-out), translate 0.9s var(--ease-out);
+}
+
+/* 索引内容：自己滚动，滚到顶再往上就回到第一屏 */
+.sheet-scroll {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 9rem 4vw 7rem;
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #00000059 transparent;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(2.5rem);
+  transition: opacity 0.6s 0.42s, transform 0.9s var(--ease-out) 0.42s,
+    visibility 0s linear 1.3s;
+}
+
+.sheet-scroll:focus {
+  outline: none;
+}
+
+.overlay.is-expanded .sheet-scroll {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0.42s, 0.42s, 0s;
+}
+
+.sheet {
+  width: min(100%, 76rem);
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.sheet__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(20rem, auto);
+  align-items: end;
+  gap: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--rule);
+}
+
+.sheet__eyebrow {
+  grid-column: 1 / -1;
+  margin: 0 0 -1.4rem;
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.sheet__title {
+  margin: 0;
+  font-size: clamp(2.6rem, 6vw, 6.5rem);
+  font-weight: 650;
+  line-height: 0.85;
+  letter-spacing: -0.085em;
+}
+
+.sheet__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem 1.1rem;
+  font-size: 0.72rem;
+  font-style: normal;
+  line-height: 1.4;
+}
+
+.sheet__url {
+  color: var(--ink-faint);
+}
+
+.sheet__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2.75rem 3rem;
+  padding-top: 3rem;
+}
+
+.sheet__section {
+  grid-column: span 12;
+  min-width: 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--rule);
+}
+
+.sheet__section--wide {
+  grid-column: span 8;
+}
+
+.sheet__section--half {
+  grid-column: span 4;
+}
+
+.sheet__label {
+  margin: 0 0 1.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sheet__more {
+  margin: 1.5rem 0 0;
+  font-size: 0.7rem;
+}
+
+.sheet__coda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule-soft);
+  color: var(--ink-faint);
+  font-size: 0.68rem;
+}
+
+.contact {
+  cursor: pointer;
+  font-variant-ligatures: none;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+}
+
+.contact.is-deciphering {
+  text-decoration-style: dashed;
+}
+
+/* 文章清单（首页索引、归档、分类、标签共用） */
+.entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: entry;
+}
+
+.entry {
+  position: relative;
+  padding-left: 2rem;
+  counter-increment: entry;
+}
+
+.entry + .entry {
+  margin-top: 1.65rem;
+}
+
+.entry::before {
+  content: counter(entry, decimal-leading-zero);
+  position: absolute;
+  top: 0.08rem;
+  left: 0;
+  color: var(--ink-faint);
+  font-size: 0.64rem;
+}
+
+.entry__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.entry__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 680;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.entry__date {
+  flex: none;
+  color: var(--ink-soft);
+  font-size: 0.66rem;
+}
+
+.entry__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.64rem;
+}
+
+.tag {
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tag--hash {
+  border-style: dashed;
+  color: var(--ink-soft);
+}
+
+.terms {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.78rem;
+}
+
+.terms li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #ececec;
+}
+
+.terms__count {
+  color: var(--ink-faint);
+  font-size: 0.64rem;
+}
+
+.terms--inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+}
+
+.terms--inline li {
+  padding: 0;
+  border: 0;
+}
+
+.empty {
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+}
+
+/* 首页索引里的内容：等 overlay 展开后逐块升起 */
+.overlay .reveal {
+  opacity: 0;
+  transform: translateY(1.2rem);
+}
+
+.overlay.is-expanded .reveal {
+  animation: enter 0.7s var(--ease-out) forwards;
+}
+
+.overlay.is-expanded .sheet__header {
+  animation-delay: 0.44s;
+}
+
+.overlay.is-expanded .sheet__grid > :nth-child(1) {
+  animation-delay: 0.52s;
+}
+
+.overlay.is-expanded .sheet__grid > :nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.overlay.is-expanded .sheet__grid > :nth-child(3) {
+  animation-delay: 0.68s;
+}
+
+.overlay.is-expanded .sheet__coda {
+  animation-delay: 0.76s;
+}
+
+/* 内页进场：轻微上浮，避免"页面是静止的"那种生硬感 */
+.kind-post .reveal,
+.kind-page .reveal,
+.kind-archive .reveal {
+  animation: enter 0.7s var(--ease-out) both;
+}
+
+@keyframes enter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes cue-bob {
+  0%,
+  100% {
+    transform: translate(-50%);
+  }
+  50% {
+    transform: translate(-50%, 0.3rem);
+  }
+}
+
+/* ==========================================================================
+   内页：同样黑白等宽，按编辑排版分栏
+   ========================================================================== */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 4vw;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+  font-size: 0.72rem;
+}
+
+.topbar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.topbar__mark {
+  width: 0.45rem;
+  height: 0.95rem;
+  background: var(--ink);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.topbar__brand:hover .topbar__mark {
+  transform: scaleY(1.25) rotate(8deg);
+}
+
+.topbar__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+}
+
+.topbar__nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.topbar__nav a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.site-main {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 5rem 4vw 6rem;
+}
+
+.doc__header,
+.listing__header {
+  padding-bottom: 2rem;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid var(--rule);
+}
+
+.doc__eyebrow,
+.listing__eyebrow {
+  margin: 0 0 1rem;
+  color: var(--ink-soft);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.doc__title,
+.listing__title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 650;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  overflow-wrap: anywhere;
+}
+
+.listing__title {
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+}
+
+.doc__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  margin: 1.5rem 0 0;
+  font-size: 0.66rem;
+}
+
+.doc__body {
+  max-width: 56rem;
+  font-size: 0.95rem;
+  line-height: 1.85;
+}
+
+.doc__body h2,
+.doc__body h3,
+.doc__body h4 {
+  margin: 2.6rem 0 0.9rem;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+}
+
+.doc__body h2 {
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 1.4rem;
+}
+
+.doc__body h3 {
+  font-size: 1.15rem;
+}
+
+.doc__body p {
+  margin: 1.1rem 0;
+}
+
+.doc__body ul,
+.doc__body ol {
+  padding-left: 1.3rem;
+}
+
+.doc__body li {
+  margin: 0.35rem 0;
+}
+
+.doc__body blockquote {
+  margin: 1.6rem 0;
+  padding: 0.2rem 0 0.2rem 1.1rem;
+  border-left: 2px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+.doc__body hr {
+  margin: 2.4rem 0;
+  border: 0;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.doc__body img {
+  display: block;
+  margin: 1.8rem auto;
+  border: 1px solid var(--rule-soft);
+}
+
+.doc__body table {
+  width: 100%;
+  margin: 1.6rem 0;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.doc__body th,
+.doc__body td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--rule-soft);
+  text-align: left;
+}
+
+.doc__body thead th {
+  border-bottom: 2px solid var(--rule);
+}
+
+.doc__body code {
+  padding: 0.1em 0.32em;
+  background: var(--code-bg);
+  font-family: inherit;
+  font-size: 0.88em;
+}
+
+.doc__body pre {
+  margin: 1.6rem 0;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  background: var(--code-bg);
+  border-left: 3px solid var(--rule);
+}
+
+.doc__body pre code {
+  padding: 0;
+  background: none;
+  line-height: 1.7;
+}
+
+/* Hexo 的高亮输出 */
+.doc__body figure.highlight,
+.doc__body .highlight {
+  margin: 1.6rem 0;
+  background: var(--code-bg);
+  border-left: 3px solid var(--rule);
+  overflow: hidden;
+}
+
+.doc__body .highlight table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.doc__body .highlight td {
+  padding: 0;
+  border: 0;
+  vertical-align: top;
+}
+
+.doc__body .highlight .gutter {
+  width: 1%;
+  padding: 1rem 0.6rem;
+  color: var(--ink-faint);
+  text-align: right;
+  user-select: none;
+}
+
+.doc__body .highlight pre {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  border: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+
+/* 黑白配色下的语法着色：只靠明度区分 */
+.highlight .comment,
+.hljs-comment {
+  color: #8c8c8c;
+  font-style: italic;
+}
+
+.highlight .keyword,
+.highlight .selector-tag,
+.hljs-keyword,
+.hljs-selector-tag {
+  font-weight: 700;
+}
+
+.highlight .string,
+.highlight .regexp,
+.hljs-string,
+.hljs-regexp {
+  color: #333;
+}
+
+.highlight .number,
+.highlight .literal,
+.hljs-number,
+.hljs-literal {
+  color: #5c5c5c;
+}
+
+.highlight .built_in,
+.highlight .type,
+.hljs-built_in,
+.hljs-type {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.highlight .meta,
+.hljs-meta {
+  color: var(--ink-faint);
+}
+
+.highlight .deletion {
+  background: #eee;
+  text-decoration: line-through;
+}
+
+.highlight .addition {
+  background: #eee;
+}
+
+.doc__updated {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule-soft);
+  color: var(--ink-faint);
+  font-size: 0.68rem;
+}
+
+.doc__nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1.5rem;
+  max-width: 56rem;
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+
+.doc__nav-link {
+  display: block;
+  font-size: 0.72rem;
+  text-decoration: none;
+}
+
+.doc__nav-link span {
+  display: block;
+  color: var(--ink-faint);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.doc__nav-link strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.doc__nav-link:hover strong {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.doc__nav-link--next {
+  text-align: right;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 1.8rem 4vw 3rem;
+  border-top: 1px solid var(--rule-soft);
+  color: var(--ink-faint);
+  font-size: 0.66rem;
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   窄屏
+   ========================================================================== */
+
+@media (max-width: 800px) {
+  .sheet-scroll {
+    padding: 7.5rem 1.25rem 5rem;
+  }
+
+  .sheet__header {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .sheet__links {
+    justify-content: flex-start;
+  }
+
+  .sheet__grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .sheet__section,
+  .sheet__section--wide,
+  .sheet__section--half {
+    grid-column: 1;
+  }
+
+  .sheet__coda {
+    justify-content: flex-start;
+  }
+
+  .entry__head {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .site-main {
+    padding: 3.5rem 1.25rem 4rem;
+  }
+
+  .doc__nav-link--next {
+    text-align: left;
+  }
+}
+
+@media (max-width: 759px) {
+  .intro {
+    top: 59%;
+    left: 6vw;
+    right: 6vw;
+    transform: none;
+  }
+
+  .intro__hello {
+    font-size: clamp(3.5rem, 16vw, 6rem);
+  }
+
+  .intro__name {
+    margin-top: 0.8rem;
+    font-size: clamp(1rem, 4.25vw, 1.45rem);
+  }
+
+  .solids {
+    bottom: 3.1rem;
+    width: 80vw;
+    height: 3.4rem;
+  }
+
+  .scroll-cue {
+    bottom: 0.65rem;
+  }
+
+  .view-overlay .intro {
+    transform: translateY(-2rem);
+  }
+
+  .overlay.is-expanded .overlay__copy {
+    top: 1.35rem;
+    transform: translate(-50%) scale(0.48);
+  }
+}
+
+/* ==========================================================================
+   无障碍：减少动态效果
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.reduce-motion .reveal {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.reduce-motion .overlay.is-expanded .reveal {
+  opacity: 1;
+  transform: none;
+}

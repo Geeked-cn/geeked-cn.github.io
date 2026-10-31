@@ -1,0 +1,7 @@
+<div class="wrap page-head reveal">
+  <h1 class="page-title">#<%= page.tag %></h1>
+  <p class="page-desc"><%= __('total_posts', page.posts.length) %></p>
+</div>
+<div class="wrap">
+  <%- partial('_partial/post-list', { posts: page.posts }) %>
+</div>

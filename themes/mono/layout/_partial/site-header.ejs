@@ -1,0 +1,11 @@
+<header class="topbar">
+  <a class="topbar__brand" href="<%- url_for('/') %>">
+    <span class="topbar__mark" aria-hidden="true"></span>
+    <span><%= config.title %></span>
+  </a>
+  <nav class="topbar__nav" aria-label="主导航">
+    <% Object.keys(theme.menu || {}).forEach(function (name) { %>
+    <a href="<%- url_for(theme.menu[name]) %>"><%= name %></a>
+    <% }) %>
+  </nav>
+</header>

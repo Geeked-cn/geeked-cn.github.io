@@ -1,0 +1,6 @@
+# 老链接兜底：/blog/xxx 之类的外链仍然能进来
+/blog/*  /:splat  301
+
+# 站点地图与订阅的统一入口（部分爬虫会试这些路径）
+/feed  /atom.xml  301
+/rss   /atom.xml  301

@@ -1,0 +1,99 @@
+<%
+const hero = theme.hero || {};
+const heroConfig = {
+  hello: hero.hello || 'Hello,',
+  name: hero.name || config.subtitle || config.title,
+  overlayText: hero.overlay || config.description || '',
+  portrait: hero.portrait || '/img/portrait.webp',
+  keepPhoto: hero.keep_photo === true
+};
+const latest = site.posts.sort('-date').limit(theme.overlay_posts || 8);
+const email = theme.email || {};
+%>
+<img id="portrait-source" src="<%- url_for(heroConfig.portrait) %>" alt="" hidden>
+
+<canvas id="portrait" aria-label="一幅由字符拼成的人像，选中可以看原图。" role="button" tabindex="0"></canvas>
+
+<section class="intro" aria-label="开场白">
+  <p class="intro__copy">
+    <span id="hello-line" class="intro__hello"></span><span id="name-line" class="intro__name"></span><span id="typing-cursor" class="typing-cursor" aria-hidden="true"></span>
+  </p>
+</section>
+
+<div class="solids" aria-hidden="true">
+  <canvas id="solids-canvas"></canvas>
+</div>
+
+<button id="scroll-cue" class="scroll-cue" type="button" tabindex="-1" aria-label="向下滚动"></button>
+
+<section id="overlay" class="overlay" aria-label="站点索引">
+  <p id="overlay-copy" class="overlay__copy">
+    <span id="overlay-text"></span><span id="overlay-cursor" class="typing-cursor" aria-hidden="true"></span>
+  </p>
+
+  <div id="sheet-scroll" class="sheet-scroll" tabindex="0" aria-label="站点索引内容">
+    <article class="sheet">
+      <header class="sheet__header reveal">
+        <p class="sheet__eyebrow"><%= __('index') %></p>
+        <h2 class="sheet__title"><%= config.title %></h2>
+        <address class="sheet__links">
+          <a href="<%- url_for('/archives/') %>"><%= __('archives') %></a>
+          <a href="<%- url_for('/about/') %>"><%= __('about') %></a>
+          <a href="<%- url_for('/atom.xml') %>">RSS</a>
+          <% if (config.url) { %><span class="sheet__url"><%= config.url.replace(/^https?:\/\//, '') %></span><% } %>
+        </address>
+      </header>
+
+      <div class="sheet__grid">
+        <section class="sheet__section sheet__section--wide reveal">
+          <h2 class="sheet__label"><%= __('latest_posts') %></h2>
+          <%- partial('_partial/post-entries', { posts: latest }) %>
+          <p class="sheet__more"><a href="<%- url_for('/archives/') %>"><%= __('archives') %> →</a></p>
+        </section>
+
+        <section class="sheet__section sheet__section--half reveal">
+          <h2 class="sheet__label"><%= __('categories') %></h2>
+          <ul class="terms">
+            <% site.categories.sort('name').each(function (category) { %>
+            <li>
+              <a href="<%- url_for(category.path) %>"><%= category.name %></a>
+              <span class="terms__count"><%= category.length %></span>
+            </li>
+            <% }) %>
+          </ul>
+        </section>
+
+        <section class="sheet__section sheet__section--half reveal">
+          <h2 class="sheet__label"><%= __('tags') %></h2>
+          <ul class="terms terms--inline">
+            <% site.tags.sort('name').each(function (tag) { %>
+            <li>
+              <a href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
+              <span class="terms__count"><%= tag.length %></span>
+            </li>
+            <% }) %>
+          </ul>
+        </section>
+      </div>
+
+      <footer class="sheet__coda reveal">
+        <% if (email.address) { %>
+        <a
+          id="contact-email"
+          class="contact"
+          role="link"
+          tabindex="0"
+          data-decipher="<%= email.address %>"
+          aria-label="邮箱地址，悬停或聚焦后显示"
+        ><%= email.masked || email.address %></a>
+        <% } %>
+        <span class="sheet__note"><%= __('powered_by', 'Hexo') %> · <%= __('theme') %> mono</span>
+      </footer>
+    </article>
+  </div>
+</section>
+
+<script>
+  window.MONO_HERO = <%- JSON.stringify(heroConfig) %>;
+</script>
+<script src="<%- url_for('/js/hero.js') %>" defer></script>

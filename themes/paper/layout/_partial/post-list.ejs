@@ -1,0 +1,41 @@
+<%
+// 复用的文章列表：归档 / 分类 / 标签 / 首页都用它
+const items = (posts && posts.toArray) ? posts.toArray() : (posts || []);
+%>
+<% if (!items.length) { %>
+<p class="empty"><%= __('empty') %></p>
+<% } else { %>
+<ul class="post-list">
+  <% items.forEach(function (post, i) { %>
+  <li class="post-item reveal" style="animation-delay:<%= Math.min(i, 8) * 60 %>ms">
+    <div class="post-item-date"><%= date(post.date, 'MM-DD') %></div>
+    <div class="post-item-body">
+      <h2 class="post-item-title">
+        <a href="<%- url_for(post.path) %>"><%= post.title %></a>
+      </h2>
+      <p class="post-item-excerpt"><%- strip_html(post.excerpt || post.content).substring(0, 120).trim() %>…</p>
+      <div class="post-item-meta">
+        <time datetime="<%= date_xml(post.date) %>"><%= date(post.date, 'YYYY 年 MM 月 DD 日') %></time>
+        <% if (post.categories && post.categories.length) { %>
+        <span class="dot">·</span>
+        <% post.categories.forEach(function (cat) { %>
+        <a class="chip" href="<%- url_for(cat.path) %>"><%= cat.name %></a>
+        <% }) %>
+        <% } %>
+        <% if (post.tags && post.tags.length) { %>
+        <% post.tags.forEach(function (tag) { %>
+        <a class="chip chip-ghost" href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
+        <% }) %>
+        <% } %>
+      </div>
+    </div>
+  </li>
+  <% }) %>
+</ul>
+<% } %>
+
+<% if (typeof paginator !== 'undefined' && paginator.total > 1) { %>
+<nav class="pagination" aria-label="分页">
+  <%- paginator({ prev_text: '← 上一页', next_text: '下一页 →', escape: false }) %>
+</nav>
+<% } %>

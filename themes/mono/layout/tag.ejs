@@ -1,0 +1,7 @@
+<section class="listing">
+  <header class="listing__header reveal">
+    <p class="listing__eyebrow"><%= __('tags') %> · <%= __('total_posts', page.posts.length) %></p>
+    <h1 class="listing__title">#<%= page.tag %></h1>
+  </header>
+  <%- partial('_partial/post-entries', { posts: page.posts }) %>
+</section>

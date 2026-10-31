@@ -1,0 +1,12 @@
+<%
+const heading = page.year
+  ? page.year + ' 年' + (page.month ? ' ' + page.month + ' 月' : '')
+  : __('archives');
+%>
+<section class="listing">
+  <header class="listing__header reveal">
+    <p class="listing__eyebrow"><%= __('total_posts', page.posts.length) %></p>
+    <h1 class="listing__title"><%= heading %></h1>
+  </header>
+  <%- partial('_partial/post-entries', { posts: page.posts }) %>
+</section>
