@@ -13,7 +13,7 @@ timezone: 'Asia/Shanghai'
 # 网址
 # ---------------------------------------------------------------
 # 线上地址（canonical、sitemap、atom 都按它生成）
-url: https://geeked-cn.github.io
+url: https://www.xhxh.eu.cc
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
