@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>写文章</title>
+<link rel="stylesheet" href="/ui.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="brand">
+    <span class="mark"></span>
+    <span>写文章</span>
+    <span class="muted" id="current-file">新文章</span>
+  </div>
+  <div class="actions">
+    <button id="btn-open" class="ghost">打开文章</button>
+    <button id="btn-new" class="ghost">写新的</button>
+    <button id="btn-wide" class="ghost toggle on" title="显示/隐藏右侧预览">预览</button>
+    <button id="btn-publish" class="primary">提交更新博客</button>
+  </div>
+</header>
+
+<section class="meta">
+  <input id="title" class="title-input" placeholder="在这里写标题…" autocomplete="off" spellcheck="false">
+  <div class="fields">
+    <label class="field">
+      <span>标签</span>
+      <input id="tags" placeholder="用逗号隔开，如：随笔, 生活" autocomplete="off">
+    </label>
+    <label class="field">
+      <span>分类</span>
+      <input id="categories" placeholder="如：随笔" autocomplete="off">
+    </label>
+    <label class="field">
+      <span>日期</span>
+      <input id="date" type="datetime-local">
+    </label>
+    <label class="field">
+      <span>链接</span>
+      <input id="slug" placeholder="留空自动生成" autocomplete="off" spellcheck="false">
+    </label>
+  </div>
+</section>
+
+<main class="workspace" id="workspace">
+  <div class="pane editor-pane">
+    <div class="toolbar" id="toolbar">
+      <button data-block="h2">大标题</button>
+      <button data-block="h3">小标题</button>
+      <button data-block="p">正文</button>
+      <i class="sep"></i>
+      <button data-cmd="bold"><b>粗体</b></button>
+      <button data-cmd="italic"><em>斜体</em></button>
+      <button data-cmd="insertUnorderedList">圆点列表</button>
+      <button data-cmd="insertOrderedList">数字列表</button>
+      <button data-block="blockquote">引用</button>
+      <button data-block="pre">代码</button>
+      <i class="sep"></i>
+      <button data-act="link">链接</button>
+      <button data-act="image">图片</button>
+      <button data-act="clear">清格式</button>
+    </div>
+    <div id="editor" class="editor" contenteditable="true" spellcheck="false"
+         data-placeholder="直接从这儿开始写。选中文字再点上面的按钮就能加粗、做标题、列清单。"></div>
+  </div>
+
+  <div class="pane preview-pane">
+    <div class="pane-head">预览<span class="hint">（发布后的样子）</span></div>
+    <article id="preview" class="preview"></article>
+  </div>
+</main>
+
+<footer class="statusbar">
+  <span id="status" class="status-dot">就绪</span>
+  <span class="spacer"></span>
+  <span class="muted" id="counter">0 字</span>
+</footer>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="drawer-head">
+    <span>打开已有文章</span>
+    <button id="btn-close-drawer" class="ghost">关闭</button>
+  </div>
+  <ul id="post-list" class="post-list"></ul>
+</div>
+
+<input type="file" id="file-image" accept="image/*" hidden>
+<div class="toast" id="toast" hidden></div>
+
+<script src="/ui.js"></script>
+</body>
+</html>
